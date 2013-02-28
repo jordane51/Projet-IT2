@@ -1,0 +1,59 @@
+completer: (pseudo code)
+    creer etat_poubelle;
+    i parcours tous les sommets:
+        récuperer les liaisons du sommet[i];
+        si liaisons du sommet[i] != alphabet alors:
+            récuperer liaison manquante et rajouter celle-ci orientée vers etat_poubelle
+
+    retourner nouvel automate (copie ? ou référence ?, on verra ...)
+
+union/intersection :
+    voir cours
+
+
+miroir:
+    flag = NULL;
+    i parcours tous les sommets:
+        j parcours les liaisons de sommet[i]:
+            (exemple: si sommet[i]->sommet[x] en 'a', alors sommet[x]->sommet[i])
+            continue sur toutes les autres liaisons du sommet[i]
+        sommet[i].flag = True
+
+
+    Subtilité: faire un test pour savoir si un sommet n'est pas déjà marqué pour reconnaitre
+    si l'on doit "retourner" les fleches.
+
+    pour ce faire, faire une "structure" permettant d'avoir chaque etat lié à un flag
+    exemple  en pseudo code:
+        struct toto{
+            bool flag; //valeur par defaut à false
+            etat etat;
+        }
+
+    en python ce serait :
+        flag = 0
+
+        struct_nouvelle =()
+
+        for i in etats:
+            struct_nouvelle += (flag, i)
+
+        //ce qui donnerait un truc comme : ((etat1, false), (etat2, false),..)
+
+
+
+determinisation:
+    voir cours, TD
+
+
+complement (:
+    etats non finaux deviennent finaux
+    etats finaux deviennent non finaux
+    On garde toutes les liaisons telles quelles.
+
+minimisation:
+    voir cours, TD
+
+expression_vers_automate():
+    algorithme de Thomson à revoir ("plus rapide à écrire que Glushkov")
+
