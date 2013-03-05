@@ -2,6 +2,7 @@ import automaton
 
 
 def complement(aut):
+    """Return the complement of an automate"""
     states = aut.get_states()
     finals = set()
 
