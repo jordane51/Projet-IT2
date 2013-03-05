@@ -3,7 +3,7 @@ import automaton
 
 def complete(aut):
     """Return the Automate completed"""
-    trash_is_here = 0
+    trash_is_here = False
     aut_bis = aut.clone()
 
     alphabet = aut_bis.get_alphabet()
@@ -15,8 +15,10 @@ def complete(aut):
             if transition_tmp == set():
                 if not trash_is_here:
                     aut_bis.add_state("Trash")
-                    trash_is_here = 1
+                    trash_is_here = True
                 aut_bis.add_transition((state, letter, "Trash"))
+            if trash_is_here:
+                aut_bis.add_transition(("Trash", letter, "Trash"))
 
     return aut_bis
 
