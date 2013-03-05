@@ -47,7 +47,7 @@ class pretty_set(frozenset):
 
 def _translate( obj, nb ):
     """
-    This function translates recursively all the numbers contained in 
+    This function translates recursively all the numbers contained in
     a iterable object.
 
     Keyword arguments:
@@ -79,7 +79,7 @@ def _translate( obj, nb ):
 
 def _extract_maximal_id( obj ):
     """
-    This function extracts recursively the maximal integer contained inside an 
+    This function extracts recursively the maximal integer contained inside an
     iterable object.
 
     Example:
@@ -113,7 +113,7 @@ def _extract_maximal_id( obj ):
 
 def _extract_minimal_id( obj ):
     """
-    This function extracts recursively the minimal integer contained inside an 
+    This function extracts recursively the minimal integer contained inside an
     iterable object.
 
     Example:
@@ -186,31 +186,31 @@ def _test_is_hashable( obj, name ):
 class automaton:
     """
     This class implements an automaton without epsilon transition
-    
-    This automaton is defined by the 6-uple <A, E, Q, I, F, T> where 
+
+    This automaton is defined by the 6-uple <A, E, Q, I, F, T> where
     A is an alphabet;
-    E is a subset of A containing all the epsilon transitions 
+    E is a subset of A containing all the epsilon transitions
     Q is the set of states;
     I is a subset of Q and is the set of initial states;
     F is a subset of Q and is the set of final states;
     T is a subset of Q X A X Q, and is the set of transitions.
     """
     def __init__(
-        self, alphabet=None, epsilons=None, states=None, initials=None, finals=None, 
+        self, alphabet=None, epsilons=None, states=None, initials=None, finals=None,
         transitions=None
     ):
         """
         The constructor of the automaton class
 
         During the construction, if a state (resp. a character) doesn't exist,
-        the state (resp. character) is automatically added in the list of 
+        the state (resp. character) is automatically added in the list of
         states (resp. alphabet).
-        
+
         Keyword arguments:
         alphabet -- the alphabet [default=None]
                     this argument has to contain a set of hashable objects
         epsilon characters -- the list of epsilon characters [default=None]
-                              this argument has to contain a list of hashable 
+                              this argument has to contain a list of hashable
                               objects
         states -- the list of states  [default=None]
                   this argument has to contain a list of hashable objects
@@ -220,7 +220,7 @@ class automaton:
                    this argument has to contain a list of hashable objects
         transitions -- the list of transitions. [default = None]
                        a transition has to be encoded by a tuple (q1, c, q2)
-                       where q1 and q2 are states and c is a character. 
+                       where q1 and q2 are states and c is a character.
 
         Example:
 
@@ -268,12 +268,10 @@ class automaton:
         if finals != None:
             self.add_final_states( finals )
 
-
-
     def get_maximal_id( self ):
         """
         Returns the maximal integer present among all the states
-        
+
         Example:
 
         >>> b = automaton(
@@ -291,7 +289,7 @@ class automaton:
     def get_minimal_id( self ):
         """
         Returns the minimal integer present among all the states
-        
+
         Example:
 
         >>> b = automaton(
@@ -346,7 +344,7 @@ class automaton:
         >>> b.get_states() == set( [
         ...     (pretty_set([2,14]), 5),
         ...     (4,'a'),
-        ...     (7,8) 
+        ...     (7,8)
         ... ] )
         True
 
@@ -376,7 +374,7 @@ class automaton:
         >>> def parity( obj ):
         ...    return obj%2
         >>> a = automaton(
-        ...     initials = [3], finals=[4], transitions = [ 
+        ...     initials = [3], finals=[4], transitions = [
         ...         (0,'a',1), (0,'b',1), (1,'a',2), (2,'a',3), (4,'c',3)
         ...     ]
         ... )
@@ -406,7 +404,7 @@ class automaton:
     def __eq__( self, a ):
         """
         Tests whether two automata are equals.
-        
+
         More precisely, that function test if the 6-uplet
         <A, E, Q, I, F, T> of the two automata are equals.
 
@@ -491,7 +489,7 @@ class automaton:
 
     def renumber_the_states( self ):
         """
-        Renumbers all states of the automaton from 1 to n, where n 
+        Renumbers all states of the automaton from 1 to n, where n
         is the number of automaton states.
 
         Example:
@@ -547,7 +545,7 @@ class automaton:
         True
         """
         self.add_state( state )
-        self._initial_states.add( state ) 
+        self._initial_states.add( state )
 
     def add_initial_states( self, list_of_states ):
         """
@@ -583,7 +581,7 @@ class automaton:
         True
         """
         self.add_state( state )
-        self._final_states.add( state ) 
+        self._final_states.add( state )
 
     def add_final_states( self, list_of_states ):
         """
@@ -644,7 +642,7 @@ class automaton:
         The solution is to use a tuple:
 
         >>> a.add_state( (1,2,5) )
-        
+
         """
         _test_is_hashable( state, "States" )
         self._states.add( state )
@@ -720,7 +718,7 @@ class automaton:
 
     def add_epsilon_character( self, character ):
         """
-        Defines an epsilon character and adds that character in       
+        Defines an epsilon character and adds that character in
         the alphabet.
 
         Characters have to be hashable.
@@ -781,7 +779,7 @@ class automaton:
         where q1 and q2 are states, and c is a character.
 
         Example:
-        
+
         >>> a = automaton()
         >>> a.add_transition( (1,'a',2) )
         >>> a.get_transitions() == set( [ (1,'a',2) ] )
@@ -802,7 +800,7 @@ class automaton:
         where q1 and q2 are states, and c is a character.
 
         Example:
-        
+
         >>> a = automaton()
         >>> a.add_transitions( [ (1,'a',2), (1,'b',1) ] )
         >>> a.get_transitions() == set( [ (1,'a',2), (1,'b',1) ] )
@@ -816,7 +814,7 @@ class automaton:
         Tests whether a character is in the alphabet.
 
         Example:
-        
+
         >>> a = automaton( alphabet=['a','b'])
         >>> a.has_character( 'a' ) and a.has_character( 'b' )
         True
@@ -830,7 +828,7 @@ class automaton:
         Tests whether a state is in the automaton.
 
         Example:
-        
+
         >>> a = automaton( states=[1, (1,2)] )
         >>> a.has_state( 1 ) and a.has_state( (1,2) )
         True
@@ -843,7 +841,7 @@ class automaton:
         Tests whether a state is initial.
 
         Example:
-        
+
         >>> a = automaton( states= [1,2,3,4], initials=[1, 3] )
         >>> a.state_is_initial( 1 ) and a.state_is_initial( 3 )
         True
@@ -857,7 +855,7 @@ class automaton:
         Returns the list of states.
 
         Example:
-        
+
         >>> a = automaton( states= [1,2,3,4] )
         >>> a.get_states() == set( [1,2,3,4] )
         True
@@ -868,7 +866,7 @@ class automaton:
         Returns the list of transitions.
 
         Example:
-        
+
         >>> a = automaton( transitions= [ (0,'a',1), (1,'b',1), (1,'a',0) ] )
         >>> a.get_transitions() == set( [ (0,'a',1), (1,'b',1), (1,'a',0) ] )
         True
@@ -883,7 +881,7 @@ class automaton:
         Tests whether a state is final.
 
         Example:
-        
+
         >>> a = automaton( states= [1,2,3,4], finals=[1, 3] )
         >>> a.state_is_final( 1 ) and a.state_is_final( 3 )
         True
@@ -896,7 +894,7 @@ class automaton:
         Returns the list of initial states.
 
         Example:
-        
+
         >>> a = automaton( states=[1,2,3,4], initials=[ 1,3 ] )
         >>> a.get_initial_states() == set( [ 1, 3 ] )
         True
@@ -907,7 +905,7 @@ class automaton:
         Returns the list of final states.
 
         Example:
-        
+
         >>> a = automaton( states=[1,2,3,4], finals=[ 1,3 ] )
         >>> a.get_final_states() == set( [ 1, 3 ] )
         True
@@ -918,7 +916,7 @@ class automaton:
         Returns the alphabet.
 
         Example:
-        
+
         >>> a = automaton( alphabet=['a','c'] )
         >>> a.get_alphabet() == set( [ 'a', 'c' ] )
         True
@@ -948,7 +946,7 @@ class automaton:
         Removes all the epsilon transition
 
         Example:
-        
+
         >>> a = automaton( epsilons=['0','1'])
         >>> a.get_alphabet() == set( ['0','1'] ) and a.get_epsilons() == set( ['0','1'] )
         True
@@ -965,11 +963,11 @@ class automaton:
         Let ``states`` be the input set of state. Let``character`` be the
         input character.
 
-        if ``character`` is an epsilon character, then the output is all the 
-            states connected with ``states`` by using a path of epsilon 
+        if ``character`` is an epsilon character, then the output is all the
+            states connected with ``states`` by using a path of epsilon
             transitions.
         if ``character`` is not an epsilon character,
-            The output is the set of vertices connected to ``state`` by using a 
+            The output is the set of vertices connected to ``state`` by using a
             path containing exactly one transition labeled by ``character`` and
             any number of epsilon transitions.
 
@@ -977,8 +975,8 @@ class automaton:
 
         states    -- A set of states [default= the inital states of the automaton]
         character -- a character
-        ignore_epsilons -- if set to True, all the epsilon charaters will be 
-                           considerated as usal character ( The input character 
+        ignore_epsilons -- if set to True, all the epsilon charaters will be
+                           considerated as usal character ( The input character
                            will be considerated as usual character )
 
         Example:
@@ -1006,7 +1004,7 @@ class automaton:
         ...     epsilons=['0'],
         ...     initials=[0], finals=[3],
         ...     transitions=[
-        ...         (0,'0',1), (1,'a',2), (1,'b',3), (2,'0',3), (3,'b',2), 
+        ...         (0,'0',1), (1,'a',2), (1,'b',3), (2,'0',3), (3,'b',2),
         ...         (3,'a',0)
         ...     ]
         ... )
@@ -1053,7 +1051,7 @@ class automaton:
     def delta_star( self, word, states=None, ignore_epsilons=False ):
         """
         if len(word)>0  return delta_star( word[1:], delta( word[0], states ) )
-        else            return the set of epsilon accessible states from 
+        else            return the set of epsilon accessible states from
                         the input states ``states``.
 
         Keyword Arguments:
@@ -1061,7 +1059,7 @@ class automaton:
         states    -- A set of states [default= the inital states of the automaton]
         character -- a character
         ignore_epsilons -- if set to True, all the epsilon charaters will be
-                           considerated as usal characters ( the input characters 
+                           considerated as usal characters ( the input characters
                            will be considated as usual characters )
 
         Example:
@@ -1089,7 +1087,7 @@ class automaton:
         ...     epsilons=['0'],
         ...     initials=[0], finals=[3],
         ...     transitions=[
-        ...         (0,'0',1), (1,'a',2), (1,'b',3), (2,'0',3), (3,'b',2), 
+        ...         (0,'0',1), (1,'a',2), (1,'b',3), (2,'0',3), (3,'b',2),
         ...         (3,'a',0)
         ...     ]
         ... )
@@ -1107,7 +1105,7 @@ class automaton:
         True
         >>> a.delta_star( [ 'b', 'a' ], ignore_epsilons=True ) == set( )
         True
-        
+
         """
         if states==None:
             states = self.get_initial_states()
@@ -1127,18 +1125,18 @@ class automaton:
     ):
         """
         Returns True if the word is recognized by the automaton.
-        
+
         Epsilon characters are considerated to be the same neutral element
         of the free monoide of the words on the set of non-epsilon characters.
 
         Keyword arguments:
         world -- a list of character
-        initial_states -- a alternative set of initial state 
+        initial_states -- a alternative set of initial state
                           [default=the initial set of the automaton]
-        ignore_epsilons -- if set to True, all the epsilon charaters will be 
-                           considerated as usal characters ( the characters of 
+        ignore_epsilons -- if set to True, all the epsilon charaters will be
+                           considerated as usal characters ( the characters of
                            the input world will be considated as usual characters )
-        
+
         Example:
 
         An exemple without epsilon transitions:
@@ -1166,7 +1164,7 @@ class automaton:
         ...     epsilons=['0'],
         ...     initials=[0], finals=[3],
         ...     transitions=[
-        ...         (0,'0',1), (1,'a',2), (1,'b',3), (2,'0',3), (3,'b',2), 
+        ...         (0,'0',1), (1,'a',2), (1,'b',3), (2,'0',3), (3,'b',2),
         ...         (3,'a',0)
         ...     ]
         ... )
@@ -1184,7 +1182,7 @@ class automaton:
         False
         >>> a.word_is_recognized( [ 'b', 'a' ], ignore_epsilons=True )
         False
-        
+
         """
         ending_states = self.delta_star(
             word, initial_states, ignore_epsilons
@@ -1205,7 +1203,7 @@ class automaton:
         <BLANKLINE>
         digraph G {
         }
-        
+
         """
         state_to_id = _object_to_id()
         for state in self._states:
@@ -1221,31 +1219,31 @@ class automaton:
                 if( (origin,character) in self._adjacence ):
                     for end in self._adjacence[ (origin, character) ]:
                         result += (
-                            '\n\t' + str(state_to_id.id(origin)) + '->' + 
+                            '\n\t' + str(state_to_id.id(origin)) + '->' +
                             str(state_to_id.id(end)) + ' [label=' +
                             str(character) + ', shape=normal]'
                         )
         for state in self._states:
             if state in self._final_states and state in self._initial_states:
                 result += (
-                    '\n\t' + str(state_to_id.id(state)) + 
+                    '\n\t' + str(state_to_id.id(state)) +
                     ' [margin=0.0, shape=diamond, peripheries=2, label="' +
                     str(state) + '"];'
                 )
             elif state in self._final_states:
                 result += (
-                    '\n\t' + str(state_to_id.id(state)) + 
+                    '\n\t' + str(state_to_id.id(state)) +
                     ' [margin=0.0, shape=oval, peripheries=2, label="' +
                     str(state) + '"];'
                 )
             elif state in self._initial_states:
                 result += (
-                    '\n\t' + str(state_to_id.id(state)) + 
+                    '\n\t' + str(state_to_id.id(state)) +
                     ' [margin=0.0, shape=diamond, label="' + str(state) + '"];'
                 )
             else:
                 result += (
-                    '\n\t' + str(state_to_id.id(state)) + 
+                    '\n\t' + str(state_to_id.id(state)) +
                     ' [margin=0.0, shape=oval, label="' + str(state) + '"];'
                 )
         result += '\n}'
@@ -1253,11 +1251,11 @@ class automaton:
     def display( self, title=None, wait=True ):
         """
         Displays the automaton on the screen.
-        
+
         Keyword Arguments:
         title -- The title of the figure [default=None]
-        wait -- If set to True, display(...) interupt the program, display the 
-                automaton and the program will continue if the user close the 
+        wait -- If set to True, display(...) interupt the program, display the
+                automaton and the program will continue if the user close the
                 automaton window.
                 Tf set to False, display(...) display the automaton, but doesn't
                 block the execution of the main program.
@@ -1265,7 +1263,7 @@ class automaton:
         Bug:
         On Windows, display never dosen't block the execution of the main program.
         On Windows, temporary files are not freed.
-        """ 
+        """
         f=tempfile.NamedTemporaryFile(delete=False)
         f.write( self.to_dot( title ).encode( 'utf-8' ) )
         f.close()
@@ -1286,13 +1284,13 @@ class automaton:
 def xml_to_list_of_automata( xml_path ):
     """
     Converts an xml file to a list of automata.
-    
+
     Keyword arguments:
     xml_path -- the path of the xml file.
 
     Example:
 
-    We create a temporary file and write in that file the xml code of two 
+    We create a temporary file and write in that file the xml code of two
     automata.
     Then we load that two automata with the xml_to_list_of_automata( ... )
     function.
