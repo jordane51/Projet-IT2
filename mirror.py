@@ -12,7 +12,7 @@ def mirror(aut):
     initial_states = aut.get_final_states()
     final_states = aut.get_initial_states()
 
-    return automaton.automaton(aut.get_epsilons(), aut.get_states(),
+    return automaton.automaton(aut.get_alphabet(), aut.get_epsilons(), aut.get_states(),
                                initial_states, final_states, transitions)
 
 
