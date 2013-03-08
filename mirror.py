@@ -2,7 +2,7 @@ import automaton
 
 
 def mirror(aut):
-    """Return the mirror of an automate """
+    """Returns the mirror of an automate """
     transitions = []
     transitions_aut = aut.get_transitions()
 
