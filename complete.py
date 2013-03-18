@@ -2,7 +2,7 @@ import automaton
 
 
 def complete(aut):
-    """Return the Automate completed"""
+    """Returns the Automate completed"""
     trash_is_here = False
     aut_bis = aut.clone()
 
