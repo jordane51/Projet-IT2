@@ -59,7 +59,7 @@ def intersection(aut1, aut2):
 
 	return aut_res
 
-#youri's code
+#youri's automate pour test
 def A():
 	return automaton.automaton( ['a','b'], '0', [1,2,3,4,5], [1], [3,5],[(1,'a',2), (1, 'b', 3), (2, 'a', 3), (2, 'b', 4), (3, 'a', 4), (3, 'b', 5), (4, 'a', 5), (4, 'b', 1), (5, 'a', 2), (5, 'b', 3)] )
 
