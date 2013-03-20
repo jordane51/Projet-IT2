@@ -1,8 +1,9 @@
 # -*- coding: UTF-8 -*-
 
 import automaton
+import complete
 
-def new_finals_states(aut1, aut2, aut_res, inter=True):
+def new_finals_states(aut1, aut2, aut_res, inter):
 	""" Determine the new finals states for intersection or union operation between two automates """
 	for state in aut_res.get_states():
 		if state not in aut_res.get_final_states(): 
@@ -14,13 +15,14 @@ def new_finals_states(aut1, aut2, aut_res, inter=True):
 					aut_res.add_final_state((state[0], state[1]))
 
 
-def intersection_union(aut1, aut2, inter=True):
+def intersection_union(aut1, aut2, inter):
 	"""Returns the intersection of aut1 and aut2
 	if inter == True, intersection function is done, 
 	else, union function is done..
 	"""
 	aut_res = automaton.automaton()
-
+	aut1 = complete.complete(aut1) 
+	aut2 = complete.complete(aut2)
 	# intersection des alphabets des 2 automates mis en paramètres
 	alphabet_res = aut1.get_alphabet().intersection(aut2.get_alphabet())
 	stack = []
@@ -60,19 +62,29 @@ def intersection_union(aut1, aut2, inter=True):
 		#stack.pop()
 
 	new_finals_states(aut1, aut2, aut_res, inter)
-	# renumber the states ?
-	return aut_res
+	# Si 'pour l'intersection' il n'y a pas d'états finaux, alors l'automate est vide.
+	if aut_res.get_final_states() != set():
+		return aut_res
+	else:
+		return "Automate VIDE, (intersection)" 
 
-#youri's automate pour test
+
 def A():
-	return automaton.automaton( ['a','b'], '0', [1,2,3,4,5], [1], [3,5],[(1,'a',2), (1, 'b', 3), (2, 'a', 3), (2, 'b', 4), (3, 'a', 4), (3, 'b', 5), (4, 'a', 5), (4, 'b', 1), (5, 'a', 2), (5, 'b', 3)] )
+	#return automaton.automaton( ['a','b'], '0', [1,2,3,4,5], [1], [3,5],[(1,'a',2), (1, 'b', 3), (2, 'a', 3), (2, 'b', 4), (3, 'a', 4), (3, 'b', 5), (4, 'a', 5), (4, 'b', 1), (5, 'a', 2), (5, 'b', 3)] )
+	return automaton.automaton(['a','b'], '0', [1,2], [1],[2],[(1,'a',2)])
 
+def B():
+	#return automaton.automaton( ['a','b'], '0', [1,2,3,4,5], [1], [3,5],[(1,'a',2), (1, 'b', 3), (2, 'a', 3), (2, 'b', 4), (3, 'a', 4), (3, 'b', 5), (4, 'a', 5), (4, 'b', 1), (5, 'a', 2), (5, 'b', 3)] )
+	return automaton.automaton(['a','b'], '0', [1,2], [1],[2],[(1,'b',2)])
 
 def main():
-	toto = intersection_union(A(), A(), inter=True)
-	toto.display()
+	toto = intersection_union(A(), B(), True)
+	if type(toto) == str:
+		print("AUTOMATE VIDE !")
+	else:
+		toto.display()
 	A().display()
-	titi = intersection_union(A(), A(), inter=False)
+	titi = intersection_union(A(), B(), False)
 	titi.display()
 
 if __name__ == '__main__':
