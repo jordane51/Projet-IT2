@@ -14,10 +14,14 @@ def new_finals_states(aut1, aut2, aut_res, inter=True):
 					aut_res.add_final_state((state[0], state[1]))
 
 
-def intersection(aut1, aut2):
-	"""Returns the intersection of aut1 and aut2"""
+def intersection_union(aut1, aut2, inter=True):
+	"""Returns the intersection of aut1 and aut2
+	if inter == True, intersection function is done, 
+	else, union function is done..
+	"""
 	aut_res = automaton.automaton()
 
+	# intersection des alphabets des 2 automates mis en paramètres
 	alphabet_res = aut1.get_alphabet().intersection(aut2.get_alphabet())
 	stack = []
 
@@ -55,8 +59,8 @@ def intersection(aut1, aut2):
 				
 		#stack.pop()
 
-	new_finals_states(aut1, aut2, aut_res, inter=True)
-
+	new_finals_states(aut1, aut2, aut_res, inter)
+	# renumber the states ?
 	return aut_res
 
 #youri's automate pour test
@@ -65,9 +69,11 @@ def A():
 
 
 def main():
-	toto = intersection(A(), A())
+	toto = intersection_union(A(), A(), inter=True)
 	toto.display()
 	A().display()
+	titi = intersection_union(A(), A(), inter=False)
+	titi.display()
 
 if __name__ == '__main__':
 	main()
