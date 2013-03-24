@@ -16,12 +16,9 @@ def determiniser(aut):
     
     etatInitial += aut.get_initial_states()
     
-    #Et on l'ajoute au graph
-    if len(etatInitial) > 1:
-        resultat.add_initial_state(tuple(etatInitial))
-    else:
-        resultat.add_initial_state(etatInitial[-1])
-    
+    #Et on l'ajoute au graphe
+    resultat.add_initial_state(tuple(etatInitial))
+
     #Et à la pile, car il faut traiter les transitions
     pile += [etatInitial]
     
@@ -31,19 +28,32 @@ def determiniser(aut):
     #Tant que la pile a un état à traiter
     for etatCourant in pile:
         for letter in alphabet:
+            hasFinalState = False
             delta = []
             delta += aut.delta(letter,etatCourant)
             print("Etat de la pile: ")
-            print(delta)
+            print(pile)
             print("-----------------")
+            
+            #On regarde s'il y a un état final dans le lot
+            for etatTmp in delta:
+                if aut.state_is_final(etatTmp):
+                    hasFinalState = True
             nouvelEtat = (tuple(delta))
             if delta != etatCourant:
                 resultat.add_state(nouvelEtat)
-                resultat.add_transition((etatCourant[-1],letter,nouvelEtat))
+                resultat.add_transition((tuple(etatCourant),letter,nouvelEtat))
             else:
                 print("Etat courant:")
                 print(etatCourant)
-                resultat.add_transition((etatCourant[-1],letter,etatCourant[-1]))
+                resultat.add_transition((tuple(etatCourant),letter,tuple(etatCourant)))
+            traites += [etatCourant]
+                    
+            #Si il y a un final, on passe l'etat en final
+            if hasFinalState:
+                resultat.add_final_state(nouvelEtat)
+            if nouvelEtat not in traites:
+                pile += [nouvelEtat]
     
     
     """
