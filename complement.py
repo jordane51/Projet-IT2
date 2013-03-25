@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: UTF-8 -*-
+
 import automaton
 
 
@@ -15,15 +18,14 @@ def complement(aut):
 
 
 def main():
-    aut1 = automaton.automaton(
+    aut = automaton.automaton(
         epsilons=[],
         states=[0, 1], initials=[0], finals=[1],
         transitions=[(0, 'a', 1), (1, 'b', 0)])
 
-    aut1.display()
-    toto = complement(aut1)
-
-    toto.display()
+    aut.display(title="Automate origin", wait=False)
+    toto = complement(aut)
+    toto.display(title="Automate origin's complement", wait=False)
 
 if __name__ == '__main__':
     main()
