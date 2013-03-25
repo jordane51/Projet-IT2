@@ -1,5 +1,8 @@
+#TODO Idée pour les parenthèses etoile. : Appel récursif quand on voit un motif : '(' ..... ')*'
+# avec  list_res += ['*', appel_rec]
+
+
 def regex_analyzer(string):
-    print(string)
     liste_res = []
 
     if '+' in string:
@@ -48,8 +51,9 @@ def regex_analyzer(string):
 
 def main():
     string = "a+cv*+b*f*"
+    print(string)
     list_res = regex_analyzer(string)
-    print list_res
+    print(list_res)
 
 if __name__ == '__main__':
     main()
