@@ -1,58 +1,67 @@
-#TODO Idée pour les parenthèses etoile. : Appel récursif quand on voit un motif : '(' ..... ')*'
-# avec  list_res += ['*', appel_rec]
-
-
-def regex_analyzer(string):
-    liste_res = []
-
+def regex_analyzer_bis(string):
     if '+' in string:
-        toto = string.split('+')
+        # Récupère l'indice du premier '+' dans la chaine string.
+        plus_index = string.index('+')
+        chaine_gauche = string[:plus_index]
+        chaine_droite = string[plus_index + 1:]
+        return ['+', [regex_analyzer_bis(chaine_gauche)], [regex_analyzer_bis(chaine_droite)]]
 
-    if len(toto) > 1:
-        liste_res = ['+']
-        for x in toto:
-            # N'a qu'un seul element (donc à mettre directement dans la liste
-            # resultat
-            if len(x) == 1:
-                liste_res += [[x]]
-            # A plus d'un élément, donc est un 'produit' de type
-            # abc -> [., [a], [b], [c]]
-            # et/ou bien à une étoile également à gerer..
-            else:
-                # Gestion des etoiles simple (sans parenthèses pour le moment)
-                if '*' in x:
-                    titi = ['.']
+    if '(' in string:
+        # TODO enlever les indices des '(' et ')*'
+        index_parg = string.index(')')
+        index_pard = string.index(')')
+        chaine_gauche = string[:index_parg]
+        chaine_droite = string[index_pard:]
 
-                    # Parcours des couples de caractères. a* teste si suivant
-                    # de 'a' est une étoile, si oui l'ajoute avec le bon format
-                    # et incrémente de 2 le curseur.
-                    # Sinon rajoute normalement le caractère courant.
-                    cpt = 0
-                    while cpt < len(x):
-                        if cpt + 1 < len(x) and x[cpt + 1] == '*':
-                            titi += [['*', x[cpt]]]
-                            cpt += 2
-                            continue
+        #Trouver les indices exact de la chaine entre parentheses
+        chaine_entre_par = string[:]
 
-                        titi += [[x[cpt]]]
-                        cpt += 1
+        list_regex_gauche = regex_analyzer_bis(chaine_gauche)
+        list_regex_droite = regex_analyzer_bis(chaine_droite)
 
-                    liste_res += [titi]
-                else:
-                    titi = ['.']
-                    for y in x:
-                        titi += [[y]]
-                    liste_res += [titi]
+        if list_regex_gauche:
+            if list_regex_droite:
+                return [[list_regex_gauche], ['*', [regex_analyzer_bis(chaine_entre_par)]], [list_regex_droite]]
+            return [[list_regex_gauche], ['*', [regex_analyzer_bis(chaine_entre_par)]]]
+        return ['*', [regex_analyzer_bis(chaine_entre_par)]]
 
-        return liste_res
+    if '*' in string:
+        # Récupère l'indice du premier '*' dans la chaine string
+        if len(string) > 2:
+            etoile_index = string.index('*')
+            chaine_gauche = string[:etoile_index - 1]
+            chaine_droite = string[etoile_index:]
+            list_regex_gauche = regex_analyzer_bis(chaine_gauche)
+            list_regex_droite = regex_analyzer_bis(chaine_droite)
+
+            if list_regex_gauche:
+                if list_regex_droite:
+                    return [list_regex_gauche, ['*', string[etoile_index - 1]], list_regex_droite]
+                return[list_regex_gauche, ['*', string[etoile_index - 1]]]
+            return [['*', string[etoile_index - 1]]]
+
+        return [['*', string[0]]]
+
+    list_res = []
+    i = 0
+    if len(string) >= 2:
+        while(i < len(string) - 1):
+            if (i + 1 < len(string)):
+                list_res += [['.', [string[i]], [string[i + 1]]]]
+                i += 1
+            if i > len(string):
+                break
     else:
-        return list(string)
+        list_res += [string]
+
+    if len(list_res) == 1:
+        return list_res[0]
+    return list_res
 
 
 def main():
-    string = "a+cv*+b*f*"
-    print(string)
-    list_res = regex_analyzer(string)
+    string = "a+b"
+    list_res = regex_analyzer_bis(string)
     print(list_res)
 
 if __name__ == '__main__':
