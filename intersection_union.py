@@ -18,16 +18,16 @@ def new_finals_states(aut1, aut2, aut_res, inter):
 
 
 def intersection_union(aut1, aut2, inter):
-    """Returns the intersection of aut1 and aut2
+    """ Returns the intersection or the union of aut1 and aut2
     if inter == True, intersection function is done,
     else, union function is done..
     Expect that the automates are already complete (AND? deterministic)
-    Their alphabet must be equals.
+    Their alphabet must be equals else it return None.
     """
     aut_res = automaton.automaton()
 
     if aut1.get_alphabet() != aut2.get_alphabet():
-        return
+        return None
 
     alphabet_res = aut1.get_alphabet()
     stack = []
@@ -64,8 +64,6 @@ def intersection_union(aut1, aut2, inter):
 
                         aut_res.add_transition(((state[0], state[1]), letter, new_state))
 
-        #stack.pop()
-
     new_finals_states(aut1, aut2, aut_res, inter)
     # Si 'pour l'intersection' il n'y a pas d'états finaux, alors l'automate est vide.
     if aut_res.get_final_states() != set():
@@ -75,10 +73,12 @@ def intersection_union(aut1, aut2, inter):
 
 
 def intersection(aut1, aut2):
+    """ Returns the intersection of aut1 inter aut2 """
     return intersection_union(aut1, aut2, True)
 
 
 def union(aut1, aut2):
+    """ Returns the union of aut1 union aut2 """
     return intersection_union(aut1, aut2, False)
 
 

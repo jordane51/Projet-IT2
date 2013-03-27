@@ -1,14 +1,13 @@
+#!/usr/bin/python3
+# -*- coding: UTF-8 -*-
+
+
 def regex_analyzer(string):
     if '+' in string:
         plus_index = string.index('+')
         chaine_gauche = string[:plus_index]
         chaine_droite = string[plus_index + 1:]
 
-        #print("chaine_gauche")
-        #print(chaine_gauche)
-        #print("chaine_droite")
-        #print(chaine_droite)
-        #print("--------------")
         if chaine_droite == '':
             print("ERREUR, + mal placé")
 
@@ -45,7 +44,8 @@ def regex_analyzer(string):
                         if string[:index_parg] != '':
                             if string[index_pard:] != ')':
                                 # Cas 4
-                                return ['.', regex_analyzer(string[:index_parg]), ['.', regex_analyzer(chaine_entre_par), regex_analyzer(string[index_pard:])]]
+                                return ['.', regex_analyzer(string[:index_parg]),
+                                        ['.', regex_analyzer(chaine_entre_par), regex_analyzer(string[index_pard:])]]
                             else:
                                 # Cas 2
                                 return ['.', regex_analyzer(string[:index_parg]), regex_analyzer(chaine_entre_par)]
@@ -63,7 +63,6 @@ def regex_analyzer(string):
                             return ['+', ['*', regex_analyzer(chaine_entre_par)], regex_analyzer(string[index_pard + 3:])]
                         # Cas où c'est forcément une lettre ou une parenthèse
                         # ouvrante
-                        # elif string[index_pard + 2] == '(':
                         else:
                             return ['.', ['*', regex_analyzer(chaine_entre_par)], regex_analyzer(string[index_pard + 2:])]
 
@@ -76,6 +75,7 @@ def regex_analyzer(string):
             return ['+', [chaine_gauche], regex_analyzer(chaine_droite)]
 
     # Fonction concatener pour des chaines de caractères sans autres opérateurs
+    # qu'étoile uniquement (sans parenthèse)
     return concatener(string)
 
 
