@@ -1,5 +1,14 @@
 import automaton
 
+def isDeterministe(aut):
+    """Retourne True si l'automate est déterministe, False sinon"""
+    for etatCourant in aut.get_states():
+        for letter in aut.get_alphabet():
+            if len(aut.delta(letter,[etatCourant])) > 1:
+                #print("Supérieur pour" + letter + ":" + etatCourant)
+                return False
+    return True
+
 
 def determiniser(aut):
     """Retourne un automate déterminisé de l'automate passé en paramètre"""
@@ -17,8 +26,8 @@ def determiniser(aut):
 
     #etatInitial +=
 
-    print("ETATT INITIAL:")
-    print(etatInitial)
+    #print("ETATT INITIAL:")
+    #print(etatInitial)
 
     #Et on l'ajoute au graphe
     resultat.add_initial_state(tuple(etatInitial))
@@ -26,17 +35,17 @@ def determiniser(aut):
     #Et à la pile, car il faut traiter les transitions
     pile += [etatInitial]
 
-    print(etatInitial)
-    print(pile)
+    #print(etatInitial)
+    #print(pile)
 
     #Tant que la pile a un état à traiter
     for etatCourant in pile:
         for letter in alphabet:
             hasFinalState = False
             delta = list(aut.delta(letter, etatCourant))
-            print("Etat de la pile: ")
-            print(pile)
-            print("-----------------")
+            #print("Etat de la pile: ")
+            #print(pile)
+            #print("-----------------")
 
             #On regarde s'il y a un état final dans le lot
             for etatTmp in delta:
@@ -49,8 +58,8 @@ def determiniser(aut):
                     resultat.add_state(nouvelEtat)
                     resultat.add_transition((tuple(etatCourant), letter, nouvelEtat))
                 else:
-                    print("Etat courant:")
-                    print(etatCourant)
+                    #print("Etat courant:")
+                    #print(etatCourant)
                     resultat.add_transition((tuple(etatCourant), letter, tuple(etatCourant)))
             traites += [etatCourant]
 
@@ -116,8 +125,8 @@ def determiniser(aut):
     #print(etatComposite)
 #print(traites)"""
 
-    resultat.display(title="Determinisé", wait=False)
-    return aut
+    #resultat.display(title="Determinisé", wait=False)
+    return resultat
 
 
 def main():
@@ -130,14 +139,17 @@ def main():
     #    epsilons = [],
     #    states=[1,2],initials=[1],finals=[2],
     #    transitions=[(1,'a',1),(1,'b',1),(1,'a',2)])
-    #automate3 = automaton.automaton(
-    #epsilons = [],
-    #states=['E','a1','a2','a3','a4','a5','b1','b2','b3','b4','b5'],initials=['E'],finals=['a3','b2','b5','a5'],
-    #transitions=[('E','a','a1'),('a1','a','a1'),('a1','a','a2'),('a1','b','b1'),('b1','b','b1'),('a2','b','b2'),('b1','a','a1'),('b1','a','a2'),('a2','a','a3'),('E','b','b1'),('E','a','a2'),('E','b','b4'),('E','b','b3'),('E','a','a4'),('a4','a','a4'),('a4','b','b3'),('b3','b','b3'),('b3','a','a4'),('b3','b','b4'),('a4','b','b4'),('b4','b','b5'),('b4','a','a5')])
+    automate3 = automaton.automaton(
+    epsilons = [],
+    states=['E','a1','a2','a3','a4','a5','b1','b2','b3','b4','b5'],initials=['E'],finals=['a3','b2','b5','a5'],
+    transitions=[('E','a','a1'),('a1','a','a1'),('a1','a','a2'),('a1','b','b1'),('b1','b','b1'),('a2','b','b2'),('b1','a','a1'),('b1','a','a2'),('a2','a','a3'),('E','b','b1'),('E','a','a2'),('E','b','b4'),('E','b','b3'),('E','a','a4'),('a4','a','a4'),('a4','b','b3'),('b3','b','b3'),('b3','a','a4'),('b3','b','b4'),('a4','b','b4'),('b4','b','b5'),('b4','a','a5')])
 
-    automate.display(title="Origine", wait=False)
-    determiniser(automate)
-
+    #automate.display(title="Origine", wait=False)
+    #determiniser(automate)
+    #print(isDeterministe(automate))
+    automate4 = determiniser(automate)
+    #print(isDeterministe(automate4))
+    automate4.display(title="2", wait=False)
 
 if __name__ == '__main__':
         main()
