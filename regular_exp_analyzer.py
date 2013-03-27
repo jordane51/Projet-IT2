@@ -13,31 +13,49 @@ def regex_analyzer(string):
             print("ERREUR, + mal placé")
 
         if len(chaine_gauche) >= 2:
-            print("OH EA")
             if '(' not in chaine_gauche:
                 return ['+', regex_analyzer(chaine_gauche), regex_analyzer(chaine_droite)]
             elif '(' in chaine_gauche:
                 index_parg = string.index('(')
-                index_pard = string.index(')')
-                chaine_entre_par = string[index_parg + 1:index_pard]
-                print("chaine entre par")
-                print(chaine_entre_par)
 
-                if index_pard + 1 > len(string) or string[index_pard + 1] != '*':
-                    print("ERREUR, * absent après parenthèse")
+                # Cas où la parenthèse est en début de chaine.
+                # On récupère l'indice de la bonne parenthèse ')'
+                if index_parg == 0:
+                    # Idée : renverser la chaine de caractère avec [::-1]
+                    # On récupère l'indice du premier ')' rencontré
+                    # on soustrait la longueur de la chaine 'string' par
+                    # l'indice trouvé - 1 (pour que ça corresponde vraiment au
+                    # bon indice)
+                    string_tmp = string[::-1]
+                    index_pard = string_tmp.index(')')
+                    index_pard = len(string) - index_pard - 1
 
-                # Cas où il n'y a rien après l'étoile
-                if index_pard + 2 >= len(string):
-                    return ['*', regex_analyzer(chaine_entre_par)]
-                else:
-                    # Si à la suite de l'étoile il y a un '+' alors :
-                    if string[index_pard + 2] == '+':
-                        return ['+', ['*', regex_analyzer(chaine_entre_par)], regex_analyzer(string[index_pard + 3:])]
-                    # Cas où c'est forcément une lettre ou une parenthèse
-                    # ouvrante
-                    # elif string[index_pard + 2] == '(':
+                    # Gestion d'erreur (bientot)
+                    #if index_pard + 1 < len(string):
+                    #    if string[index_pard + 1] != '*':
+                    #        return "* non présent après )"
+                    #    else:
+                    #        return "* non présent après )"
+
+                    chaine_entre_par = string[index_parg + 1:index_pard]
+
+                    # Cas où il n'y a rien après l'étoile
+                    if index_pard + 2 >= len(string):
+                        return ['*', regex_analyzer(chaine_entre_par)]
                     else:
-                        return ['.', ['*', regex_analyzer(chaine_entre_par)], regex_analyzer(string[index_pard + 2:])]
+                        # Si à la suite de l'étoile il y a un '+' alors :
+                        if string[index_pard + 2] == '+':
+                            return ['+', ['*', regex_analyzer(chaine_entre_par)], regex_analyzer(string[index_pard + 3:])]
+                        # Cas où c'est forcément une lettre ou une parenthèse
+                        # ouvrante
+                        # elif string[index_pard + 2] == '(':
+                        else:
+                            return ['.', ['*', regex_analyzer(chaine_entre_par)], regex_analyzer(string[index_pard + 2:])]
+
+                # Cas où il y a quelquechose avant '('
+                # Forcément une chaine de caractère
+                else:
+                    return ['.', regex_analyzer(string[:index_parg]), regex_analyzer(string[index_parg:])]
 
         return ['+', [chaine_gauche], regex_analyzer(chaine_droite)]
 
@@ -78,7 +96,9 @@ def regex_analyzer(string):
 
 
 def main():
-    string = "a*b"
+    string = "(a+(a+b)*)*"
+    string = "toto(a+b)*"
+    print(string)
     list_res = regex_analyzer(string)
     print(list_res)
 
