@@ -30,14 +30,29 @@ def regex_analyzer(string):
                     index_pard = string_tmp.index(')')
                     index_pard = len(string) - index_pard - 1
 
-                    # Gestion d'erreur (bientot)
-                    #if index_pard + 1 < len(string):
-                    #    if string[index_pard + 1] != '*':
-                    #        return "* non présent après )"
-                    #    else:
-                    #        return "* non présent après )"
-
                     chaine_entre_par = string[index_parg + 1:index_pard]
+                    # Cas où il n'y a pas d'étoile après la parenthèse
+                    # Il faut concatener 4 cas :
+                    # (ui) 1
+                    # ui(ui) 2
+                    # (ui)ui 3
+                    # ui(ui)ui 4
+                    if index_pard + 1 > len(string) - 1:
+                        # Cas 1
+                        return regex_analyzer(chaine_entre_par)
+
+                    if string[index_pard + 1] != '*':
+                        if string[:index_parg] != '':
+                            if string[index_pard:] != ')':
+                                # Cas 4
+                                return ['.', regex_analyzer(string[:index_parg]), ['.', regex_analyzer(chaine_entre_par), regex_analyzer(string[index_pard:])]]
+                            else:
+                                # Cas 2
+                                return ['.', regex_analyzer(string[:index_parg]), regex_analyzer(chaine_entre_par)]
+                        elif string[:index_parg] == '':
+                            if string[index_pard + 1:] != '':
+                                # Cas 3
+                                return ['.', regex_analyzer(chaine_entre_par), regex_analyzer(string[index_pard:])]
 
                     # Cas où il n'y a rien après l'étoile
                     if index_pard + 2 >= len(string):
@@ -57,50 +72,103 @@ def regex_analyzer(string):
                 else:
                     return ['.', regex_analyzer(string[:index_parg]), regex_analyzer(string[index_parg:])]
 
-        return ['+', [chaine_gauche], regex_analyzer(chaine_droite)]
+        else:
+            return ['+', [chaine_gauche], regex_analyzer(chaine_droite)]
 
-    # TODO: Manque les étoiles sans parentheses...
-    #if '*' in string:
-    #    # Récupère l'indice du premier '*' dans la chaine string
-    #    if len(string) > 2:
-    #        etoile_index = string.index('*')
-    #        chaine_gauche = string[:etoile_index - 1]
-    #        chaine_droite = string[etoile_index:]
+    # Fonction concatener pour des chaines de caractères sans autres opérateurs
+    return concatener(string)
 
-    #        list_regex_gauche = regex_analyzer(chaine_gauche)
-    #        list_regex_droite = regex_analyzer(chaine_droite)
 
-    #        if list_regex_gauche:
-    #            if list_regex_droite:
-    #                return [list_regex_gauche, ['*', string[etoile_index - 1]], list_regex_droite]
-    #            return [list_regex_gauche, ['*', [string[etoile_index - 1]]]]
-    #        return ['*', [string[etoile_index - 1]]]
+def concatener(string):
+    # Gere uniquement une chaine de caractere de type : "abjkzhfdskjh"
+    # Cas particuliers pour des chaines de longueur 1 ou 2 exactement.
+    if len(string) == 1:
+        return list(string)
+    elif len(string) == 2:
+        if string[1] != '*':
+            return ['.', [string[0]], [string[1]]]
+        else:
+            return ['*', [string[0]]]
 
-    #    return ['*', [string[0]]]
-
-    # Cas où il n'y a plus de '+' ou de ')(' à gerer.
     list_res = []
-    i = 0
-    if len(string) >= 2:
-        while(i < len(string) - 1):
-            if (i + 1 < len(string)):
-                list_res += [['.', [string[i]], [string[i + 1]]]]
-                i += 1
-            if i > len(string):
-                break
-    else:
-        # Cas où il n'y a qu'un seul caractere dans la chaine.
-        list_res += [string]
+    list_string = list(string)
+
+    list_res += ['.']
+    while(list_string != []):
+        if len(list_string) != 1:
+            a = list_string.pop(0)
+            b = list_string.pop(0)
+            if b != '*':
+                list_res += [['.', [b], [a]]]
+            else:
+                list_res += [['*', [a]]]
+            continue
+        list_res += [[list_string.pop()]]
 
     return list_res
 
 
 def main():
-    string = "(a+(a+b)*)*"
-    string = "toto(a+b)*"
+    print("-----------------")
+    string = "a"
     print(string)
     list_res = regex_analyzer(string)
     print(list_res)
+
+    print("-----------------")
+    string = "ab"
+    print(string)
+    list_res = regex_analyzer(string)
+    print(list_res)
+
+    print("-----------------")
+    string = "a+b"
+    print(string)
+    list_res = regex_analyzer(string)
+    print(list_res)
+
+    print("-----------------")
+    string = "a*"
+    print(string)
+    list_res = regex_analyzer(string)
+    print(list_res)
+
+    print("-----------------")
+    string = "(a+b)*"
+    print(string)
+    list_res = regex_analyzer(string)
+    print(list_res)
+
+    print("-----------------")
+    string = "a*b"
+    print(string)
+    list_res = regex_analyzer(string)
+    print(list_res)
+
+    print("-----------------")
+    string = "(a+b+c)"
+    print(string)
+    list_res = regex_analyzer(string)
+    print(list_res)
+
+    print("-----------------")
+    string = "a*(a*+b*a)"
+    print(string)
+    list_res = regex_analyzer(string)
+    print(list_res)
+
+    print("-----------------")
+    string = "a+b*"
+    print(string)
+    list_res = regex_analyzer(string)
+    print(list_res)
+
+    print("-----------------")
+    string = "a+b+(k*+b)*"
+    print(string)
+    list_res = regex_analyzer(string)
+    print(list_res)
+
 
 if __name__ == '__main__':
     main()
