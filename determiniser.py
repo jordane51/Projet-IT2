@@ -4,8 +4,8 @@ def isDeterministe(aut):
     """Retourne True si l'automate est déterministe, False sinon"""
     for etatCourant in aut.get_states():
         for letter in aut.get_alphabet():
-            if len(aut.delta(letter,etatCourant)) > 1:
-                print("Supérieur pour" + letter + ":" + etatCourant)
+            if len(aut.delta(letter,[etatCourant])) > 1:
+                #print("Supérieur pour" + letter + ":" + etatCourant)
                 return False
     return True
 
@@ -146,9 +146,9 @@ def main():
 
     #automate.display(title="Origine", wait=False)
     #determiniser(automate)
-    print(isDeterministe(automate3))
-    automate4 = determiniser(automate3)
-    print(isDeterministe(automate4))
+    #print(isDeterministe(automate))
+    automate4 = determiniser(automate)
+    #print(isDeterministe(automate4))
     automate4.display(title="2", wait=False)
 
 if __name__ == '__main__':
