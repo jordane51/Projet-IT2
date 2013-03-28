@@ -6,8 +6,8 @@ from regular_exp_analyzer import regex_analyzer
 
 
 def exprToAutRec(E, aut, cpt):
-    etatCourant = E[0]
-    if etatCourant == '+':
+    caractereCourant = E[0]
+    if caractereCourant == '+':
         ri1 = cpt
         rf1 = exprToAutRec(E[1], aut, ri1)
         ri2 = rf1 + 1
@@ -17,7 +17,7 @@ def exprToAutRec(E, aut, cpt):
         aut.add_transition((rf1, 'eps', 'Fin'))
         aut.add_transition((rf2, 'eps', 'Fin'))
         return rf2
-    elif etatCourant == '*':
+    elif caractereCourant == '*':
         """
         ri1 = cpt
         rf1 = exprToAutRec(E[1],aut,ri1)
@@ -38,7 +38,7 @@ def exprToAutRec(E, aut, cpt):
         aut.add_transition((tmp2, 'eps', tmp1))
         aut.add_transition(('Init', 'eps', 'Fin'))
         return tmp2
-    elif etatCourant == '.':
+    elif caractereCourant == '.':
         ri1 = cpt
         rf1 = exprToAutRec(E[1], aut, ri1)
         ri2 = rf1 + 1
@@ -52,6 +52,7 @@ def exprToAutRec(E, aut, cpt):
         aut.add_state(ri)
         aut.add_state(rf)
         aut.add_transition((ri, E[0], rf))
+        aut.add_character(caractereCourant)
         return rf
 
 
@@ -68,7 +69,9 @@ def expression_vers_automate(E):
 def main():
     # ( a+b*a )*
     #test1 = ['*', ['+', [['a'], ['.', ['*', ['b']], ['a']]]]]
-    expression_vers_automate(regex_analyzer("(a+b+c)*")).display()
+    E = regex_analyzer("(a+b+c)*")
+    print(E)
+    expression_vers_automate(E).display(title="Automate", wait=False)
     #print(regex_analyzer("(a+b+c)*"))
 
     # ( a+b+c )
