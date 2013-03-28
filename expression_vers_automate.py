@@ -2,136 +2,68 @@ import automaton
 from regular_exp_analyzer import regex_analyzer
 
 def exprToAutRec(E, aut, cpt):
-    courant = E[0]
-    print(courant)
-    if courant == '*':
-        aut = exprToAutRec(E[1],aut,cpt = cpt+1)
-        tmp = automaton.automaton()
-        tmp.add_initial_state("INIT")
-        tmp.add_state("INTER1")
-        tmp.add_final_state("FIN")
-        tmp.add_state("INTER2")
-        tmp.add_transition(("INIT",'e',"INTER1"))
-        for initial in aut.get_initial_states():
-            tmp.add_transition(("INTER1",'e',initial))
-        for transition in aut.get_transitions():
-            tmp.add_transition(transition)
-        for final in aut.get_final_states():
-            tmp.add_transition((final,'e',"INTER2"))
-        tmp.add_transition(("INTER2",'e',"FIN"))
-        tmp.add_transition(("INIT",'e',"FIN"))
-        tmp.add_transition(("INTER2",'e',"INTER1"))
-        tmp.display(wait=False)
-    elif courant == '.':
-        aut = exprToAutRec(E[1],aut,cpt = cpt+1)
-        tmp = automaton.automaton()
-        tmp.add_initial_state("INIT")
-        tmp.add_final_state("FIN")
-        initial = None
-        final = None
-        for init in aut.get_initial_states():
-            initial = init
-        aut = exprToAutRec(E[1],aut,cpt = cpt+1)
-        for transition in aut.get_transitions():
-            tmp.add_transition(transition)
-        for fin in aut.get_final_states():
-            final = fin
-        tmp.add_transition((final,'e',"FIN"))
-    elif courant == '+':
-        aut = exprToAutRec(E[1],aut,cpt = cpt+1)
-        tmp = automaton.automaton()
-        tmp.add_initial_state("INIT")
-        tmp.add_final_state("FIN")
-        for initial in aut.get_initial_states():
-            tmp.add_transition(("INIT",'e',initial))
-        for final in aut.get_final_states():
-            tmp.add_transition((final,'e',"FINN"))
-        for transition in aut.get_transitions():
-            tmp.add_transition(transition)
+    etatCourant = E[0]
+    if etatCourant == '+':
+        ri1 = cpt
+        rf1 = exprToAutRec(E[1],aut,ri1)
+        ri2 = rf1+1
+        rf2 = exprToAutRec(E[2],aut,ri2)
+        aut.add_transition(('Init','eps',ri1))
+        aut.add_transition(('Init','eps',ri2))
+        aut.add_transition((rf1,'eps','Fin'))
+        aut.add_transition((rf2,'eps','Fin'))
+        return rf2
+    elif etatCourant == '*':
+        """
+        ri1 = cpt
+        rf1 = exprToAutRec(E[1],aut,ri1)
+        aut.add_state(ri1)
+        aut.add_transition(('Init','esp',ri1))
+        aut.add_transition((rf1,'est','Fin'))
+        aut.add_transition(('Init','esp','Fin'))
+        aut.add_transition((rf1,'esp',ri1))
+        """
+        tmp1 = cpt
+        ri1 = cpt+1
+        rf1 = exprToAutRec(E[1],aut,ri1)
+        tmp2 = rf1+1
+        aut.add_transition(('Init','eps',tmp1))
+        aut.add_transition((tmp1,'eps',ri1))
+        aut.add_transition((rf1,'eps',tmp2))
+        aut.add_transition((tmp2,'eps','Fin'))
+        aut.add_transition((tmp2,'eps',tmp1))
+        aut.add_transition(('Init','eps','Fin'))
+        return tmp2
+    elif etatCourant == '.':
+        ri1 = cpt
+        rf1 = exprToAutRec(E[1],aut,ri1)
+        ri2 = rf1+1
+        rf2 = exprToAutRec(E[2],aut,ri2)
+        aut.add_transition(('Init','eps',ri1))
+        aut.add_transition((fi1,'eps',ri2))
+        aut.add_transition((rf2,'eps','Fin'))
     else:
-        aut = exprToAutRec(E[1],aut,cpt = cpt+1)
-
-    return aut
-    """
-def exprToAutRec(E, aut, cpt):
-    # cas d'arret: liste vide
-    if len(E) > 1:
-        for caractereCourant in E:
-            #print("Itération: "+str(cpt));
-            #print(list(caractereCourant))
-            if caractereCourant == '*':
-                print("*")
-                # on commence par récuperer les finaux et initiaux
-                finaux = aut.get_final_states()
-                E.pop(0)
-                print(E)
-                initiaux = exprToAutRec(E, aut, cpt = cpt+1).get_initial_states()
-                for initial in initiaux:
-                    print("initial")
-                cpt = cpt + 1
-                ri = cpt+1
-                rf = cpt+2
-                aut.add_initial_state(ri)
-                aut.add_final_state(rf)
-            elif caractereCourant == '.':
-                print(".")
-            elif caractereCourant == '+':
-                print("+")
-            elif len(caractereCourant) == 1:
-                print("D:"+str(caractereCourant[-1]))
-                cpt = cpt+1
-                ri = str(cpt+1)+str(caractereCourant[-1])
-                rf = str(cpt+2)+str(caractereCourant[-1])
-                aut.add_initial_state(ri)
-                aut.add_final_state(rf)
-                aut.add_transition((ri,'a',rf))
-                exprToAutRec(caractereCourant, aut, cpt = cpt+1)
-    
-            
-    #print("Après récursion")
-    return aut
-    """
-    """
-    sousAutomate = automaton.automaton()
-    if len(E) > 1:
-        sousAutomateDroite = exprToAutRec(E[1],cpt)
-        for element in E[0]:
-            #element = E[0]
-            current = list(E)
-            print("Element courant")
-            print(element)
-            if element == '*':
-                print("* FTW")
-                
-            elif element == '.':
-                print(". FTW")
-        
-            elif element == '+':
-                print("+ FTW")
-
-            else:
-                print("I'm in the else")
-                sousAutomate.add_initial_state(cpt)
-                cpt = cpt+1
-                sousAutomate.add_final_state(cpt)
-                sousAutomate.add_transition((cpt-1,element[0],cpt))
-
-    return sousAutomate
-    """
+        ri = cpt
+        rf = cpt+1
+        aut.add_state(ri)
+        aut.add_state(rf)
+        aut.add_transition((ri,E[0],rf))
+        return rf
 
 def expression_vers_automate(E):
     # Bon, c'est parti !
     # Fonction récursive, on prend le premier élément, et on le traite puis on appele la fonction avec le reste de la liste. Mucho large complexidad
     #automate = automaton.automaton()
     #exprToAutRec(E)
-    automate = automaton.automaton(initials=[1],finals=[2],transitions=[(1,'a',2)])
-    return exprToAutRec(E,automate,0)
+    automate = automaton.automaton(initials=['Init'],finals=['Fin'])
+    exprToAutRec(E,automate,0)
+    return automate
 
 def main():
     # ( a+b*a )*
     #test1 = ['*', ['+', [['a'], ['.', ['*', ['b']], ['a']]]]]
     expression_vers_automate(regex_analyzer("(a+b+c)*")).display()
-    print(regex_analyzer("(a+b+c)*"))
+    #print(regex_analyzer("(a+b+c)*"))
 
     # ( a+b+c )
     #test2 = ["+", ["+",["a", "b"]], ["c"]
