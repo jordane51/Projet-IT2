@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
 
@@ -7,9 +7,6 @@ def regex_analyzer(string):
         plus_index = string.index('+')
         chaine_gauche = string[:plus_index]
         chaine_droite = string[plus_index + 1:]
-
-        if chaine_droite == '':
-            print("ERREUR, + mal placé")
 
         if len(chaine_gauche) >= 2:
             if '(' not in chaine_gauche:

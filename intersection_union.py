@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
 import automaton
@@ -83,11 +83,21 @@ def union(aut1, aut2):
 
 
 def A():
-    return automaton.automaton(['a', 'b'], '0', [1, 2], [1], [2], [(1, 'a', 2)])
+    aut = automaton.automaton(
+        epsilons=[],
+        states=[0, 1], initials=[0], finals=[0],
+        transitions=[(0, 'a', 1), (1, 'b', 0)])
+
+    return aut
 
 
 def B():
-    return automaton.automaton(['a', 'b'], '0', [1, 2], [1], [2], [(1, 'b', 2)])
+    aut = automaton.automaton(
+        epsilons=[],
+        states=[0, 1, 2], initials=[0], finals=[0, 1],
+        transitions=[(0, 'a', 2), (2, 'b', 0), (0, 'a', 1)])
+
+    return aut
 
 
 def main():

@@ -1,8 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 import automaton
 
 
 def complete(aut):
-    """Returns the Automate completed"""
+    """ Returns the Automate completed """
     trash_is_here = False
     aut_bis = aut.clone()
 
@@ -24,14 +27,15 @@ def complete(aut):
 
 
 def main():
-    aut1 = automaton.automaton(
+    aut = automaton.automaton(
         epsilons=[],
-        states=[0, 1], initials=[0], finals=[1],
-        transitions=[(0, 'a', 1), (1, 'b', 0)])
+        states=[0, 1, 2, 3], initials=[0], finals=[1, 2],
+        transitions=[(0, 'a', 1), (1, 'b', 0), (0, 'b', 2), (3, 'a', 2)])
 
-    toto = complete(aut1)
+    aut.display(title="Automate origin", wait=False)
 
-    toto.display()
+    toto = complete(aut)
+    toto.display(title="Automate origin's completed", wait=False)
 
 if __name__ == '__main__':
     main()
